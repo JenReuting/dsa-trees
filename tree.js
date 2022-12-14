@@ -28,13 +28,14 @@ class TreeNode {
    * children, count how many nodes have even values. Returns that count as
    * an integer. */
   countEvens() {
-    let node = this;
-    let count = this.val % 2 === 0 ? 1 : 0;
+    let count = 0;
+    let treeStack = [];
+    treeStack.push(this);
 
-    for (let child of node.children) {
-      if (child.val % 2 === 0) {
-        count++;
-      }
+    while (treeStack.length) {
+      let currentNode = treeStack.pop();
+      if (currentNode.val % 2 === 0) { count++; };
+      treeStack.push(...currentNode.children);
     }
     return count;
   }
@@ -43,18 +44,18 @@ class TreeNode {
    * its children, return a count of the number of nodes whose value is greater
    * than lowerBound. */
   numGreater(lowerBound) {
-    let node = this;
-    let count = (this.val > lowerBound) ? 1 : 0;
-    for (let child of node.children) {
-      if (child.val > lowerBound) {
-        count++;
-      }
+    let count = 0;
+    let treeStack = [];
+    treeStack.push(this);
+
+    while (treeStack.length) {
+      let currentNode = treeStack.pop();
+      if (currentNode.val > lowerBound) { count++; };
+      treeStack.push(...currentNode.children);
     }
     return count;
   }
 }
-
-
 
 class Tree {
   constructor(root = null) {
@@ -63,56 +64,39 @@ class Tree {
 
   /** sumValues(): add up all values in the tree. */
   sumValues() {
-    return this.root.sumValues();
+    return this.root ? this.root.sumValues() : 0;
   }
 
   /** countEvens(): count all nodes in the tree that have even values. */
   countEvens() {
-    let count = 0;
-    let treeStack = [];
-    if (this.root) {
-      treeStack.push(this.root);
-      if (this.root.val % 2 === 0) count = 1;
-    }
+    return this.root ? this.root.countEvens() : 0;
 
-    while (treeStack.length) {
-      let currentNode = treeStack.pop();
+    // let count = 0;
+    // let treeStack = [];
+    // if (this.root) {
+    //   treeStack.push(this.root);
+    //   if (this.root.val % 2 === 0) count = 1;
+    // }
 
-      if (currentNode.children !== null) {
-        for (let child of currentNode.children) {
-          treeStack.push(...child.children);
-          count += child.countEvens();
-        }
-      }
+    // while (treeStack.length) {
+    //   let currentNode = treeStack.pop();
 
-    }
-    return count;
+    //   if (currentNode.children !== null) {
+    //     for (let child of currentNode.children) {
+    //       treeStack.push(...child.children);
+    //       count += child.countEvens();
+    //     }
+    //   }
+
+    // }
+    // return count;
 
   }
 
   /** numGreater(lowerBound): return a count of the number of nodes
    * whose value is greater than lowerBound. */
   numGreater(lowerBound) {
-    let count = 0;
-    let treeStack = [];
-
-    if (this.root) {
-      treeStack.push(this.root);
-      if (this.root.val > lowerBound) count = 1;
-    }
-
-    while (treeStack.length) {
-      let currentNode = treeStack.pop();
-
-      if (currentNode.children !== null) {
-        for (let child of currentNode.children) {
-          treeStack.push(...child.children);
-          count += child.numGreater(lowerBound);
-        }
-      }
-
-    }
-    return count;
+    return this.root ? this.root.numGreater(lowerBound) : 0;
   }
 }
 
