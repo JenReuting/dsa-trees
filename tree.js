@@ -11,11 +11,15 @@ class TreeNode {
   /** sumValues(): add up all values of invoking node and its children.
    * Returns sum as an integer. */
   sumValues() {
-    let node = this;
-    let sum = this.val;
+    let sum = 0;
+    let treeStack = [];
+    treeStack.push(this);
 
-    for (let child of node.children) {
-      sum += child.val;
+    while (treeStack.length) {
+      let currentNode = treeStack.pop();
+      sum += currentNode.val;
+      treeStack.push(...currentNode.children);
+
     }
     return sum;
   }
@@ -59,22 +63,7 @@ class Tree {
 
   /** sumValues(): add up all values in the tree. */
   sumValues() {
-    let sum = this.root ? this.root.val : 0;
-    let treeStack = [];
-    if (this.root) treeStack.push(this.root);
-
-    while (treeStack.length) {
-      let currentNode = treeStack.pop();
-
-      if (currentNode.children !== null) {
-        for (let child of currentNode.children) {
-
-          treeStack.push(...child.children);
-          sum += child.sumValues();
-        }
-      }
-    }
-    return sum;
+    return this.root.sumValues();
   }
 
   /** countEvens(): count all nodes in the tree that have even values. */
